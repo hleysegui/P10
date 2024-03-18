@@ -10,16 +10,26 @@
 //
 //
 // -- This is a parent command --
-Cypress.Commands.add('login', (email, password) => { 
-    cy.visit('http://localhost:8080/#/login')
-    cy.get('[data-cy="login-input-username"]').type(email)
-    cy.get('[data-cy="login-input-password"]').type(password)
-    cy.get('[data-cy="login-submit"]').click()
+
+Cypress.Commands.add('login', (username, password) => { 
+    const apiLogin = `${Cypress.env("apiUrl")}/login`
+
+    cy.request("POST", apiLogin, {
+        "username": username,
+        "password": password
+    }).then((response) => {
+            localStorage.setItem("token", response.body.token)
+    });
 })
 
 Cypress.Commands.add('logout', () => { 
-    cy.get('[data-cy="nav-link-logout"]').click()
+    localStorage.removeItem("token")
 })
+
+Cypress.Commands.add("getBySel", (selector, ...args) => {
+    return cy.get(`[data-cy=${selector}]`, ...args)
+})
+
 //
 //
 // -- This is a child command --
