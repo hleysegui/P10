@@ -18,12 +18,12 @@ Cypress.Commands.add('login', (username, password) => {
         "username": username,
         "password": password
     }).then((response) => {
-            localStorage.setItem("token", response.body.token)
-    });
+            localStorage.setItem("user", response.body.token)
+    })
 })
 
 Cypress.Commands.add('logout', () => { 
-    localStorage.removeItem("token")
+    localStorage.removeItem("user")
 })
 
 Cypress.Commands.add("getBySel", (selector, ...args) => {
