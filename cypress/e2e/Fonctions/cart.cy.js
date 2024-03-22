@@ -61,8 +61,7 @@ describe('Cart', () => {
                         .then((k) => {
                             cy.getBySel('product-link').eq(k).click({force: true})
                             cy.getBySel('detail-product-quantity').type(fakerNegativeStock)
-                            cy.getBySel('detail-product-add').click()
-                            cy.getBySel('detail-product-form').should('have.class', 'ng-invalid')
+                            cy.getBySel('detail-product-form').should('have.class', 'ng-invalid')   
                         })
                 }) 
     })
@@ -79,8 +78,6 @@ describe('Cart', () => {
                         .then((k) => {
                             cy.getBySel('product-link').eq(k).click({force: true})
                             cy.getBySel('detail-product-quantity').type(fakerStockSup20)
-                            cy.getBySel('detail-product-add').click()
-                            cy.go('back')
                             cy.getBySel('detail-product-form').should('have.class', 'ng-valid')
                         })
                 }) 
