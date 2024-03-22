@@ -113,8 +113,8 @@ describe('Cart', () => {
                                 failOnStatusCode: false 
                             }).then((response) => {
                                 cy.log(response.body.orderLines[0].product.id)
-                                const idInApi = response.body.orderLines[0].product.id
-                                expect(idInApi).to.equal(id)
+                                const idOrder = response.body.orderLines[0].product.id
+                                expect(idOrder).to.equal(id)
                             })
                         })
                 }) 
