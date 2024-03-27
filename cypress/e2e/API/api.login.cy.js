@@ -1,4 +1,6 @@
+import { fakeEmail, fakePassword } from "../../fixtures/user"
 const apiLogin = `${Cypress.env("apiUrl")}/login`
+
 
 describe('Login test', () => {
     it('user exist', () => {
@@ -20,8 +22,8 @@ describe('Login test', () => {
             method: "POST",
             url: apiLogin,
             body: {
-                username: 'inconnu@test.fr',
-                password: 'testtest'
+                username: fakeEmail,
+                password: fakePassword
             },
             failOnStatusCode: false 
         }).then((response) => {

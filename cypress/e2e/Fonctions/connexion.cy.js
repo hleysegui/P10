@@ -1,5 +1,5 @@
-describe('Connexion', () => {
-    it('vous devez être connecté et voir le bouton panier', () => {
+describe('Test Connexion page', () => {
+    it('should login and see add to cart button', () => {
         cy.visit('http://localhost:8080/#/')
         cy.getBySel('nav-link-login').click()
         cy.getBySel('login-input-username').type('test2@test.fr')

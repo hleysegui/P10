@@ -1,31 +1,30 @@
-import { review } from '../../fixtures/reviews.js'
+import { titleFaker, commentFaker, ratingFaker } from '../../fixtures/reviews.js'
 
+const token = localStorage.getItem("user")
 const apiReviews = `${Cypress.env("apiUrl")}/reviews`
 
 beforeEach(() => {
     cy.login('test2@test.fr', 'testtest')
 })
 
-let token = localStorage.getItem("token")
 
-it('Ajouter un avis', () => {  
-    cy.fixture('review').then((data) => {
-        cy.log(data.titleFaker)
-    }) 
-    /*cy.request({
+
+it('add a review', () => {  
+     
+    cy.request({
         method: "POST",
         url: apiReviews,
         headers: {
             "Authorization": "Bearer " + token
         },
         body: {
-            "title": review.titleFaker,
-            "comment": review.commentFaker,
-            "rating": review.ratingFaker
+            "title": titleFaker,
+            "comment": commentFaker,
+            "rating": ratingFaker
         },
         failOnStatusCode: false 
       }).then((response) => {
+        expect(response.status).to.eq(200)
         cy.log(JSON.stringify(response.body))
-        expect(response.status).to.eq(200);
-      })*/
+      })
 })
