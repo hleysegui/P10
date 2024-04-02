@@ -1,13 +1,15 @@
 import { fakerNegativeStock, fakerStockSup20 } from "../../fixtures/cart"
 const token = localStorage.getItem('user')
 const apiOrders = `${Cypress.env("apiUrl")}/orders`
+const apiUpdateQuantity = `${Cypress.env("apiUrl")}/orders`
+let idCart
 
 describe('Test Cart', () => {
     beforeEach(() => {
         cy.login('test2@test.fr', 'testtest')
     })
 
-    it('Add products to cards and check stock', () => {
+     it('Add products to cards and check stock', () => {
         cy.visit('http://localhost:8080/#/products')
 
         cy.getBySel('product-link')
@@ -20,7 +22,7 @@ describe('Test Cart', () => {
                             cy.getBySel('product-link').eq(k).click({force: true})
                             cy.getBySel('detail-product-stock')
                                 .invoke('text')
-                                .should('match', /^-?(0|[1-9][0-9]*) en stock$/)
+                                .should('match', /(0|[1-9][0-9]*) en stock$/)
                                     .then((text) => {
                                     const stock = text.trim()
                                     const quantityStock = parseInt(stock.match(/\d+/))
@@ -47,7 +49,7 @@ describe('Test Cart', () => {
                 })        
     })
 
-    it('check limit with negative stock number', () => {
+    it('check limit with negative quantity', () => {
         cy.visit('http://localhost:8080/#/products')
 
         cy.getBySel('product-link')
@@ -58,13 +60,14 @@ describe('Test Cart', () => {
                         .then((n) => Cypress._.random(0, n-1))
                         .then((k) => {
                             cy.getBySel('product-link').eq(k).click({force: true})
+                            cy.getBySel('detail-product-quantity').clear()
                             cy.getBySel('detail-product-quantity').type(fakerNegativeStock)
                             cy.getBySel('detail-product-form').should('have.class', 'ng-invalid')   
                         })
                 }) 
     })
 
-    it('check limit with positive stock number', () => {
+    it('check limit with positive quantity greater than 20', () => {
         cy.visit('http://localhost:8080/#/products')
 
         cy.getBySel('product-link')
@@ -75,12 +78,13 @@ describe('Test Cart', () => {
                         .then((n) => Cypress._.random(0, n-1))
                         .then((k) => {
                             cy.getBySel('product-link').eq(k).click({force: true})
+                            cy.getBySel('detail-product-quantity').clear()
                             cy.getBySel('detail-product-quantity').type(fakerStockSup20)
-                            cy.getBySel('detail-product-form').should('have.class', 'ng-valid')
+                            cy.getBySel('detail-product-form').should('have.class', 'ng-invalid')
                         })
                 }) 
     })
-
+ 
     it('add product in cart and check via API', () => {
 
         cy.visit('http://localhost:8080/#/products')
@@ -110,17 +114,28 @@ describe('Test Cart', () => {
                                             "Authorization" : "Bearer " + token,
                                         },
                                         failOnStatusCode: true 
-                                    }).then((response) => {
-                                        cy.log(response.body.orderLines[0].product.id)
-                                        const idOrder = response.body.orderLines[0].product.id
-                                        expect(idOrder).to.equal(id)
+                                    }).its('body.orderLines').then((list) => {
+                                        expect(Cypress._.last(list).product.id).to.equal(id)
+                                        idCart = list[0].id
                                         
                                     })
                             })
                         })
-                })
-                cy.visit('http://localhost:8080/#/cart')
-                cy.getBySel('cart-line-delete').click({ multiple: true })               
+                })            
+    }) 
+    
+    it('change product quantity', () => {
+        cy.request({
+            method: "PUT", 
+            url: apiUpdateQuantity + `/${idCart}/change-quantity`,
+            headers: {
+                "Authorization" : "Bearer " + token
+            },
+            body: {
+                'quantity' : 2
+            }
+        }).then((response) => {
+            expect(response.status).to.eq(200)
+        })
     })
-
 })

@@ -24,7 +24,7 @@ it('add a review', () => {
         },
         failOnStatusCode: false 
       }).then((response) => {
-        expect(response.status).to.eq(200)
+        expect(response.status).to.eq(201)
         cy.log(JSON.stringify(response.body))
       })
 })

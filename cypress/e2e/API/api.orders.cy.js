@@ -9,7 +9,7 @@ describe('Test order API', () => {
         cy.login('test2@test.fr', 'testtest')
     })
 
-    it('should throw error 403 when user are not login', () => {
+    it('should throw error 401 when user are not login', () => {
         cy.logout()
         cy.wait(2000)
         
@@ -18,7 +18,7 @@ describe('Test order API', () => {
             url: apiOrders,
             failOnStatusCode: false 
           }).then((response) => {
-            expect(response.status).to.eq(403);
+            expect(response.status).to.eq(401);
           })
     })
 
@@ -73,10 +73,10 @@ describe('Test order API', () => {
           })
     }) 
 
-    it('add random product to the cart not available', () => {    
+    it('add product to the cart not available', () => {    
 
         cy.request({
-            method: "POST",
+            method: "PUT",
             url: apiOrdersAdd,
             headers: {
                 "Authorization": "Bearer " + token
@@ -87,7 +87,7 @@ describe('Test order API', () => {
             },
             failOnStatusCode: true 
           }).then((response) => {
-            expect(response.status).to.eq(200)
+            expect(response.status).to.eq(403)
             cy.log(JSON.stringify(response.body))
           })
     }) 
