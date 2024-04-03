@@ -14,14 +14,14 @@ Installation de :
 ## Installation 
 - Cloner le dépôt : git clone https://github.com/hleysegui/P10.git 
 - Lancer docker avec la commande : docker-compose up 
-Puis accéder au site via l'url : [text](http://localhost:8080/#/)
+Puis accéder au site via l'url : http://localhost:8080/#/
 - Lancer la commande : npx cypress open pour ouvrir cypress
     - Cliquer sur E2E 
     - Sélectionner votre navigateur
 Le navigateur va s'ouvrir avec l'ensemble des tests éffectués. lancer le test de votre choix et visualiser le résultat du test
 
 ## Documentation API 
-Accéder à la documentation de l'api via l'url : [text](http://localhost:8081/api/doc)
+Accéder à la documentation de l'api via l'url : http://localhost:8081/api/doc
 
 ## Test réalisés 
 
