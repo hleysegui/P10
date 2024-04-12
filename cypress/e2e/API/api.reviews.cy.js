@@ -7,8 +7,6 @@ beforeEach(() => {
     cy.login('test2@test.fr', 'testtest')
 })
 
-
-
 it('add a review', () => {  
      
     cy.request({
@@ -22,7 +20,7 @@ it('add a review', () => {
             "comment": commentFaker,
             "rating": ratingFaker
         },
-        failOnStatusCode: false 
+        failOnStatusCode: true 
       }).then((response) => {
         expect(response.status).to.eq(201)
         cy.log(JSON.stringify(response.body))
