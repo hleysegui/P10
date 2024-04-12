@@ -76,7 +76,7 @@ describe('Test order API', () => {
     it('add product to the cart not available', () => {    
 
         cy.request({
-            method: "PUT",
+            method: "POST",
             url: apiOrdersAdd,
             headers: {
                 "Authorization": "Bearer " + token

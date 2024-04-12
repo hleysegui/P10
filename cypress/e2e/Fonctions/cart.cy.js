@@ -84,6 +84,24 @@ describe('Test Cart', () => {
                         })
                 }) 
     })
+
+    it('check with quantity 0', () => {
+        cy.visit('http://localhost:8080/#/products')
+
+        cy.getBySel('product-link')
+                .then((link) => {
+                    const nbProduct = Cypress.$(link).length
+                    cy.getBySel('product-link').should('have.length', nbProduct)
+                        .its('length')
+                        .then((n) => Cypress._.random(0, n-1))
+                        .then((k) => {
+                            cy.getBySel('product-link').eq(k).click({force: true})
+                            cy.getBySel('detail-product-quantity').clear()
+                            cy.getBySel('detail-product-quantity').type(0)
+                            cy.getBySel('detail-product-form').should('have.class', 'ng-invalid')   
+                        })
+                }) 
+    })
  
     it('add product in cart and check via API', () => {
 
